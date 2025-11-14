@@ -1,19 +1,15 @@
 import express from 'express'
+import {PrismaClient} from './generated/prisma/index.js'
 
 const app = express()
+const prisma = new PrismaClient()
 
 const port = process.env.PORT || 3000;
 
-app.get('/products', (req, res) => {
-    res.json([
-        {
-            id: '1',
-            name: "laptop gaming",
-            price: 1000,
-            description: "laptop gaming lenovo",
-            imageURL: "https://svf.pe/wp-content/uploads/2025/01/image-2.png"
-        }
-    ])
+app.get('/products', async (req, res) => {
+
+    const products = await prisma.product.findMany()
+    return res.json(products)
 })
 
 app.listen(port, () => {
